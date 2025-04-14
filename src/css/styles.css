@@ -45,6 +45,19 @@ img {
   object-fit: cover;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 /* SECTION-FORM */
 
 .section-gallery{
@@ -62,7 +75,7 @@ img {
 
 
 .form {
-  max-width: 376px;
+  max-width: 371px;
   width: 100%;
   display: flex;
   gap: 8px;
@@ -73,9 +86,8 @@ img {
 .form-input {
   border-radius: 4px;
   border: 1px solid #808080;
-  max-width: 272px;
+  width: 272px;
   height: 40px;
-  width: 100%;
   outline: none;
   padding: 8px 16px;
   line-height: 1.5;
@@ -101,11 +113,24 @@ img {
   letter-spacing: 0.04em;
   color: #fff;
   border: none;
-
 }
 
 .btn-search:hover {
   background-color: #6c8cff;
+}
+
+.btn-load-more {
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: #4e75ff;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border: none;
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 36px;
 }
 
 .gallery {
@@ -147,6 +172,7 @@ img {
 .caption {
   text-align: center;
 }
+
 
 
 /* LOADER */

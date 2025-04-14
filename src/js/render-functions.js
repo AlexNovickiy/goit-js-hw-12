@@ -4,12 +4,14 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 let lightbox;
 
 const loader = document.querySelector('.container-form span');
+const loadMoreButton = document.querySelector('.btn-load-more');
+
 
 export function createGallery(images) {
     const galleryContainer = document.querySelector('.gallery');
     const gallery = images.map(image => {
         return `<li class="gallery-item">
-                    <a href="${image.largeImageURL}">
+                    <a class="large-image" href="${image.largeImageURL}">
                         <img
                         src="${image.webformatURL}"
                         alt="${image.tags}"
@@ -65,6 +67,14 @@ export function showLoader() {
 
 export function hideLoader() {
     loader.id = '';
+}
+
+export function showLoadMoreButton() {
+    loadMoreButton.classList.remove('visually-hidden');
+}
+
+export function hideLoadMoreButton() {
+    loadMoreButton.classList.add('visually-hidden');
 }
 
 
