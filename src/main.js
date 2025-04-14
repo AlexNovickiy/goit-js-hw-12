@@ -14,7 +14,7 @@ let query;
 let page = 1;
 let totalPages;
 
-form.addEventListener('submit', event => {
+form.addEventListener('submit', async event => {
     event.preventDefault();
     render.clearGallery();
     query = input.value.trim();
@@ -22,7 +22,7 @@ form.addEventListener('submit', event => {
         iziToast.error({
             title: '',
             iconUrl: brick,
-            message: 'Sorry, there are no images matching your search query. Please, try again!',
+            message: 'Field cannot be empty. Please, try again!',
             position: 'topRight',
             backgroundColor: '#ef4040',
             messageColor: 'white',
@@ -35,9 +35,9 @@ form.addEventListener('submit', event => {
         page = 1;
         render.hideLoadMoreButton();
         render.showLoader();
-        getImagesByQuery(query, page)
-            .then(response => { 
-            if (response.data.hits.length === 0) {
+        try {
+            const dataQuery = await getImagesByQuery(query, page);
+        if (dataQuery.hits.length === 0) {
                 iziToast.error({
                     title: '',
                     iconUrl: brick,
@@ -50,10 +50,10 @@ form.addEventListener('submit', event => {
                     maxWidth: 380,
                 });
             } else {
-                render.createGallery(response.data.hits);
+                render.createGallery(dataQuery.hits);
                 form.reset();
                 page += 1;
-                totalPages = Math.ceil(response.data.totalHits / 15);
+                totalPages = Math.ceil(dataQuery.totalHits / 15);
                 if (page > totalPages) {
                     iziToast.info({
                         title: '',
@@ -70,8 +70,8 @@ form.addEventListener('submit', event => {
                     render.showLoadMoreButton();
                 }
             }
-        })
-        .catch(error => {
+            render.hideLoader();
+        } catch (error) {
             console.error('Error fetching images:', error);
             iziToast.error({
                 title: '',
@@ -84,19 +84,18 @@ form.addEventListener('submit', event => {
                 timeout: 4000,
                 maxWidth: 380,
             });
-        })
-        .finally(() => {
-            render.hideLoader();
-        })
+        }
+        
     }
 });
 
-loadMoreButton.addEventListener('click', () => {
+loadMoreButton.addEventListener('click', async () => {
     render.showLoader();
-    getImagesByQuery(query, page)
-        .then(response => {            
-            render.createGallery(response.data.hits);
-                const cardHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
+    try {
+        const dataQuery = await getImagesByQuery(query, page);
+        render.createGallery(dataQuery.hits);
+
+        const cardHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
                 window.scrollBy({
                     top: cardHeight * 2,
                     behavior: "smooth",
@@ -116,9 +115,9 @@ loadMoreButton.addEventListener('click', () => {
         });
                 render.hideLoadMoreButton();
             }
-        })
-        .catch(error => {
-            console.error('Error fetching images:', error);
+        render.hideLoader();
+    } catch (error) { 
+        console.error('Error fetching images:', error);
             iziToast.error({
                 title: '',
                 iconUrl: brick,
@@ -130,9 +129,6 @@ loadMoreButton.addEventListener('click', () => {
                 timeout: 4000,
                 maxWidth: 380,
             });
-        })
-        .finally(() => {
-            render.hideLoader();
-        });
+    }
 });
 
